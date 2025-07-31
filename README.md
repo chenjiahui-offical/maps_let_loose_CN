@@ -1,41 +1,41 @@
-# Maps Let Loose
+# 人间地狱地图战术分析
 
-Quickly create advanced custom tacmaps for Hell Let Loose.
+## 快速为Hell Let Loose创建高级自定义战术地图。
 
 - https://mattw.io/maps-let-loose/
 
 ![](readme.png)
 
-How can I use this tool?
+##  如何使用这个工具？
 
-- Plan out garrison locations with 200m radiuses visible
-- See offensive default garrison locations to know where to attack
-- See maximum artillery ranges and which last points you can and can't hit
-- Measure distances for AT sniping
-- Create rooms to edit tacmaps live with a group of people
-- Strategize upcoming matches and scenarios with a wide variety of assets to add to the map
-    - Garrisons, OPs, Airheads, Halftracks, Tanks, Trucks, AT Guns, Markers, Player classes, Repair stations, Nodes, Supplies, Commander abilities, Measurement tools, Shapes, Textboxes, and Drawings
+- 规划驻军位置，显示200米半径范围
+- 查看攻势模式默认驻军位置，了解攻击目标
+- 查看最大炮兵射程以及可以/不能攻击的最后据点
+- 测量反坦克狙击距离
+- 创建房间与团队实时编辑战术地图
+- 使用各种资源为即将到来的比赛和场景制定策略
+    - 驻军、前哨、空降点、半履带车、坦克、卡车、反坦克炮、标记、玩家职业、维修站、节点、补给、指挥官技能、测量工具、形状、文本框和绘图
 
-What other features are there?
+## 还有哪些其他功能？
 
-- Toggle all the strongpoints and their resource icons on and off
-- Toggle the map grid on and off
-- Toggle tanks and player classes blue and red to indicate friendly/enemy
-- Save the map as a high quality 1920x1920 PNG
-- Export your current map config as a zip file and reimport to work on it later
-- Freely draw on the map in any color
-- Some smaller elements will scale larger when zoomed out
-- Mostly mobile-friendly so you can use it if you don't have a second monitor
-- Rooms can be configured with a custom password or no password at all
-- Rooms expire after 2 hours of inactivity, plenty to last the majority of matches
+- 切换所有据点及其资源图标的显示/隐藏
+- 切换地图网格的显示/隐藏
+- 切换坦克和玩家职业的蓝色和红色以表示友军/敌军
+- 将地图保存为高质量的1920x1920 PNG图片
+- 将当前地图配置导出为zip文件，稍后重新导入继续编辑
+- 在地图上自由绘制任何颜色
+- 缩小时某些较小元素会放大显示
+- 基本支持移动设备，即使没有第二个显示器也能使用
+- 房间可以配置自定义密码或无密码
+- 房间在2小时无活动后过期，足够大多数比赛使用
 
-## Build
+## 构建
 
-Refer to [BUILD.md](./BUILD.md)
-for instructions on how to build and run from source.
+参考 [BUILD.md](./BUILD.md)
+了解如何从源代码构建和运行的说明。
 
-## Contributing
+## 贡献
 
-Contributions are welcome, refer
-to [CONTRIBUTING.md](./CONTRIBUTING.md)
-for more detail.
+欢迎贡献代码，请参考
+[CONTRIBUTING.md](./CONTRIBUTING.md)
+了解更多详情。

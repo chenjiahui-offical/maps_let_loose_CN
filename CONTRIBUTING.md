@@ -1,15 +1,14 @@
-Contributing Documentation
+贡献文档
 =
 
-Contributions are certainly welcome and encouraged. 
+非常欢迎和鼓励贡献代码。
 
-This application is hosted by [GitHub Pages](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/getting-started-with-github-pages) 
-meaning the `master` branch is what GitHub uses to deploy the application as found at https://github.com/mattwright324/maps-let-loose. 
+此应用程序由 [GitHub Pages](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/getting-started-with-github-pages) 托管，
+这意味着 `master` 分支是 GitHub 用来部署应用程序的分支，可在 https://github.com/mattwright324/maps-let-loose 找到。
 
-Pull requests should generally describe the changes being made or the issue being addressed. 
-Pull requests should be merged into the `develop` branch so that I may make any additional tweaks or adjustments before 
-merging into `master` for GitHub Pages to deploy.
+拉取请求通常应该描述正在进行的更改或正在解决的问题。
+拉取请求应该合并到 `develop` 分支，以便我可以在合并到 `master` 分支供 GitHub Pages 部署之前进行任何额外的调整或修改。
 
-Make the pull request from your own fork of the project.
-It is recommended to base it off the `develop` branch.
-However, depending how involved you would like to be, I can consider adding you to the main project if asked.
+从您自己的项目分支创建拉取请求。
+建议基于 `develop` 分支。
+但是，根据您希望参与的程度，如果您提出要求，我可以考虑将您添加到主项目中。

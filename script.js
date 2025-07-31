@@ -110,9 +110,9 @@ const mll = (function () {
                     if (adjusted > max) {
                         adjusted = max;
                     }
-                    object.set({scaleX: adjusted, scaleY: adjusted});
+                    object.set({ scaleX: adjusted, scaleY: adjusted });
                 } else {
-                    object.set({scaleX: baseScale, scaleY: baseScale});
+                    object.set({ scaleX: baseScale, scaleY: baseScale });
                 }
             }
         }
@@ -166,11 +166,11 @@ const mll = (function () {
             for (let j = 0; j < elements.length; j++) {
                 const zIndex = 10 + i;
                 const element = elements[j];
-                elements[j].set({zIndex: zIndex});
+                elements[j].set({ zIndex: zIndex });
 
                 if (element.type.also && element.type.type !== "measure-line") {
                     for (let k = 0; k < element.type.also.length; k++) {
-                        element.type.also[k].set({zIndex: zIndex});
+                        element.type.also[k].set({ zIndex: zIndex });
                     }
                 }
             }
@@ -196,7 +196,7 @@ const mll = (function () {
             selectedSlide = uuidv4();
             const newDefault = $.extend({
                 id: selectedSlide,
-                name: "Default"
+                name: "默认"
             }, getFullState());
             newDefault.state.elements = [];
             newDefault.state.drawings = [];
@@ -710,7 +710,7 @@ const mll = (function () {
                 const radiusHidden = controls.checkHideRadius.is(":checked");
                 return './assets/halftrack-' + (radiusHidden ? 'plain' : 'radius') + '.png'
             },
-            controlsVisibility: {mtr: true},
+            controlsVisibility: { mtr: true },
             zoomScaleWhen: function () {
                 return controls.checkHideRadius.is(":checked")
             },
@@ -823,15 +823,15 @@ const mll = (function () {
             resolveImg: function (object) {
                 return "./assets/strafing-run.png"
             },
-            set: {snapAngle: 45},
-            controlsVisibility: {mtr: true},
+            set: { snapAngle: 45 },
+            controlsVisibility: { mtr: true },
         },
         "bombing-run": {
             resolveImg: function (object) {
                 return "./assets/bombing-run.png"
             },
-            set: {snapAngle: 45},
-            controlsVisibility: {mtr: true},
+            set: { snapAngle: 45 },
+            controlsVisibility: { mtr: true },
         },
         "supplies": {
             resolveImg: function (object) {
@@ -852,7 +852,7 @@ const mll = (function () {
                 }
                 return './assets/tank-med.png'
             },
-            controlsVisibility: {mtr: true},
+            controlsVisibility: { mtr: true },
             zoomScale: true,
             customizable: "asset",
             customScale: 0.5,
@@ -886,7 +886,7 @@ const mll = (function () {
 
                 return './assets/truck-supply.png'
             },
-            controlsVisibility: {mtr: true},
+            controlsVisibility: { mtr: true },
             zoomScale: true,
             customizable: "asset",
             customScale: 0.5,
@@ -896,7 +896,7 @@ const mll = (function () {
                 // return './assets/arty.png' // TODO
                 return './assets/at-gun-plain.png'
             },
-            controlsVisibility: {mtr: true},
+            controlsVisibility: { mtr: true },
             customizable: "asset",
             customScale: 0.5,
             zoomScale: true
@@ -965,7 +965,7 @@ const mll = (function () {
             resolveImg: function (object) {
                 return './assets/render-distance-radiuses.png'
             },
-            controlsVisibility: {mtr: true},
+            controlsVisibility: { mtr: true },
             zoomScale: false
         },
         zoomScale: false
@@ -988,7 +988,7 @@ const mll = (function () {
             const object = drawings[i];
             toFix.push(object);
         }
-        const sel = new fabric.ActiveSelection(toFix, {canvas: controls.fabricCanvas});
+        const sel = new fabric.ActiveSelection(toFix, { canvas: controls.fabricCanvas });
         controls.fabricCanvas.setActiveObject(sel).requestRenderAll();
         controls.fabricCanvas.discardActiveObject(sel).requestRenderAll();
     }
@@ -1265,7 +1265,7 @@ const mll = (function () {
                     id: uuid ? uuid : uuidv4(),
                     type: type,
                     modifier: modifier,
-                    originalEvent: {absolutePointer: e.absolutePointer},
+                    originalEvent: { absolutePointer: e.absolutePointer },
                     saveKeepScale: true,
                     text: text_bottom,
                     text2: text_top,
@@ -1300,10 +1300,10 @@ const mll = (function () {
 
             toAdd = group;
         } else if (type === "textbox") {
-            const itext = new fabric.IText("Hello world", {
+            const itext = new fabric.IText("文本内容", {
                 type: {
                     id: uuid ? uuid : uuidv4(),
-                    originalEvent: {absolutePointer: e.absolutePointer},
+                    originalEvent: { absolutePointer: e.absolutePointer },
                     type: "textbox",
                     customizable: "shape",
                 },
@@ -1341,7 +1341,7 @@ const mll = (function () {
             const rect = new fabric.Rect({
                 type: {
                     id: uuid ? uuid : uuidv4(),
-                    originalEvent: {absolutePointer: e.absolutePointer},
+                    originalEvent: { absolutePointer: e.absolutePointer },
                     type: "rectangle",
                     customizable: "shape",
                     saveKeepScale: true,
@@ -1401,7 +1401,7 @@ const mll = (function () {
             const circle = new fabric.Circle({
                 type: {
                     id: uuid ? uuid : uuidv4(),
-                    originalEvent: {absolutePointer: e.absolutePointer},
+                    originalEvent: { absolutePointer: e.absolutePointer },
                     type: "circle",
                     customizable: "shape",
                     saveKeepScale: true,
@@ -1462,7 +1462,7 @@ const mll = (function () {
             line.set({
                 type: {
                     id: uuid ? uuid : uuidv4(),
-                    originalEvent: {absolutePointer: e.absolutePointer},
+                    originalEvent: { absolutePointer: e.absolutePointer },
                     type: "measure-line",
                     text: text,
                     c1: c1,
@@ -1551,7 +1551,7 @@ const mll = (function () {
                 id: uuid ? uuid : uuidv4(),
                 type: type,
                 modifier: modifier,
-                originalEvent: {absolutePointer: e.absolutePointer}
+                originalEvent: { absolutePointer: e.absolutePointer }
             };
             if (otherObject) {
                 img.set({
@@ -1855,7 +1855,7 @@ const mll = (function () {
             slides = [
                 $.extend({
                     id: selectedSlide,
-                    name: "Default"
+                    name: "默认"
                 }, getFullState())
             ];
 
@@ -1967,9 +1967,9 @@ const mll = (function () {
                         $("#join-panel").show();
 
                         $("#warning-panel").show();
-                        $("#warn-reason").text("Either you lost connection or the rooms server restarted and the room no longer exists. Try joining again or create a new one.");
+                        $("#warn-reason").text("连接丢失或房间服务器重启，房间不再存在。请尝试重新加入或创建新房间。");
 
-                        document.title = "Rooms - Maps Let Loose"
+                        document.title = "房间 - Maps Let Loose"
                     }
                 }
 
@@ -1990,7 +1990,7 @@ const mll = (function () {
                     $(".editor-key").val(message.editorKey);
                     $(".viewer-password").val(message.viewerPassword);
 
-                    document.title = message.roomId + " - Rooms - Maps Let Loose"
+                    document.title = message.roomId + " - 房间 - Maps Let Loose"
 
                     $("#warning-panel").hide();
                     elements.joinPanel.hide();
@@ -2117,7 +2117,7 @@ const mll = (function () {
                     $(".leave-room").click();
 
                     $("#warning-panel").show();
-                    $("#warn-reason").text("The room you were in has expired. Create a new room or join another.");
+                    $("#warn-reason").text("您所在的房间已过期。请创建新房间或加入其他房间。");
                 })
 
                 socket.on('room-pw-change', function (message) {
@@ -2127,7 +2127,7 @@ const mll = (function () {
                         $(".leave-room").click();
 
                         $("#warning-panel").show();
-                        $("#warn-reason").text("The password for the room was changed and is not blank. Ask an editor for the new password.");
+                        $("#warn-reason").text("房间密码已更改且不为空。请向编辑者询问新密码。");
                     }
                     if (roomsRole === 'editor') {
                         socket.emit('editor-get-pw', {
@@ -2426,7 +2426,7 @@ const mll = (function () {
                         if (activeLine && activeLine.class == "line") {
                             const x = e.absolutePointer.x;
                             const y = e.absolutePointer.y;
-                            activeLine.set({x2: x, y2: y});
+                            activeLine.set({ x2: x, y2: y });
 
                             var points = activeShape.get("points");
                             points[pointArray.length] = {
@@ -2479,9 +2479,9 @@ const mll = (function () {
                         })
                     }
                     var points = [(e.absolutePointer.x),
-                        (e.absolutePointer.y),
-                        (e.absolutePointer.x),
-                        (e.absolutePointer.y)];
+                    (e.absolutePointer.y),
+                    (e.absolutePointer.x),
+                    (e.absolutePointer.y)];
                     var line = new fabric.Line(points, {
                         strokeWidth: 3,
                         fill: '#999999',
@@ -2604,118 +2604,118 @@ const mll = (function () {
 
 
             const contextMenu = {
-                garrison: {name: "Add Garrison", icon: "bi bi-flag"},
+                garrison: { name: "添加据点", icon: "bi bi-flag" },
                 spawn: {
-                    name: "Add Spawn",
+                    name: "添加出生点",
                     icon: "bi bi-chevron-double-right",
                     items: {
                         // arty: {name: "Arty"}, // Temporary for creating defaults
-                        airhead: {name: "Airhead", icon: "bi bi-triangle-fill"},
-                        halftrack: {name: "Halftrack", icon: "bi bi-truck"},
-                        outpost: {name: "Outpost", icon: "bi bi-triangle"},
-                        recon_op: {name: "Recon Outpost", icon: "bi bi-triangle-half"},
-                        forward: {name: "Forward Position", icon: "bi bi-triangle"}
+                        airhead: { name: "空降点", icon: "bi bi-triangle-fill" },
+                        halftrack: { name: "半履带车", icon: "bi bi-truck" },
+                        outpost: { name: "哨站", icon: "bi bi-triangle" },
+                        recon_op: { name: "侦察哨站", icon: "bi bi-triangle-half" },
+                        forward: { name: "前进阵地", icon: "bi bi-triangle" }
                     }
                 },
                 vehicle: {
-                    name: "Add Vehicle",
+                    name: "添加载具",
                     icon: "bi bi-truck",
                     items: {
-                        tank_heavy: {name: "Heavy Tank", icon: "bi bi-three-dots"},
-                        tank_medium: {name: "Medium Tank"},
-                        tank_light: {name: "Light Tank", icon: "bi bi-dot"},
-                        tank_recon: {name: "Recon Tank", icon: "bi bi-camera"},
-                        truck_jeep: {name: "Jeep", icon: "bi bi-car-front"},
-                        truck_supply: {name: "Supply Truck", icon: "bi bi-truck"},
-                        truck_transport: {name: "Transport Truck", icon: "bi bi-truck"},
+                        tank_heavy: { name: "重型坦克", icon: "bi bi-three-dots" },
+                        tank_medium: { name: "中型坦克" },
+                        tank_light: { name: "轻型坦克", icon: "bi bi-dot" },
+                        tank_recon: { name: "侦察坦克", icon: "bi bi-camera" },
+                        truck_jeep: { name: "吉普车", icon: "bi bi-car-front" },
+                        truck_supply: { name: "补给卡车", icon: "bi bi-truck" },
+                        truck_transport: { name: "运输卡车", icon: "bi bi-truck" },
                     }
                 },
                 infantry_class: {
-                    name: "Add Player Class",
+                    name: "添加玩家职业",
                     icon: "bi bi-person-circle",
                     items: {
-                        class_commander: {name: "Commander", icon: "bi bi-diagram-2-fill"},
-                        class_officer: {name: "Officer", icon: "bi bi-chevron-double-down"},
-                        class_rifleman: {name: "Rifleman", icon: "bi bi-x-lg"},
-                        class_assault: {name: "Assault", icon: "bi bi-lightning-charge"},
-                        class_auto_rifleman: {name: "Automatic Rifleman", icon: "bi bi-chevron-bar-contract"},
-                        class_medic: {name: "Medic", icon: "bi bi-plus-lg"},
-                        class_support: {name: "Support", icon: "bi bi-record-circle"},
-                        class_machine_gunner: {name: "Machine Gunner"},
-                        class_anti_tank: {name: "Anti-Tank", icon: "bi bi-chevron-double-up"},
-                        class_engineer: {name: "Engineer"},
-                        class_spotter: {name: "Spotter", icon: "bi bi-triangle-half"},
-                        class_sniper: {name: "Sniper", icon: "bi bi-bullseye"},
+                        class_commander: { name: "指挥官", icon: "bi bi-diagram-2-fill" },
+                        class_officer: { name: "军官", icon: "bi bi-chevron-double-down" },
+                        class_rifleman: { name: "步枪兵", icon: "bi bi-x-lg" },
+                        class_assault: { name: "突击兵", icon: "bi bi-lightning-charge" },
+                        class_auto_rifleman: { name: "自动步枪兵", icon: "bi bi-chevron-bar-contract" },
+                        class_medic: { name: "医疗兵", icon: "bi bi-plus-lg" },
+                        class_support: { name: "支援兵", icon: "bi bi-record-circle" },
+                        class_machine_gunner: { name: "机枪手" },
+                        class_anti_tank: { name: "反坦克兵", icon: "bi bi-chevron-double-up" },
+                        class_engineer: { name: "工程兵" },
+                        class_spotter: { name: "观察手", icon: "bi bi-triangle-half" },
+                        class_sniper: { name: "狙击手", icon: "bi bi-bullseye" },
                     }
                 },
                 buildable: {
-                    name: "Add Buildable",
+                    name: "添加建筑物",
                     icon: "bi bi-hammer",
                     items: {
-                        at_gun: {name: "AT Gun", icon: "bi bi-wrench-adjustable"},
-                        repair_station: {name: "Repair Station", icon: "bi bi-wrench-adjustable-circle"},
-                        node_batch: {name: "Batch of Nodes", icon: "bi bi-x-diamond"},
-                        node_manpower: {name: "Manpower Node", icon: "bi bi-diamond"},
-                        node_munition: {name: "Munitions Node", icon: "bi bi-diamond"},
-                        node_fuel: {name: "Fuel Node", icon: "bi bi-diamond"},
+                        at_gun: { name: "反坦克炮", icon: "bi bi-wrench-adjustable" },
+                        repair_station: { name: "维修站", icon: "bi bi-wrench-adjustable-circle" },
+                        node_batch: { name: "节点组", icon: "bi bi-x-diamond" },
+                        node_manpower: { name: "人力节点", icon: "bi bi-diamond" },
+                        node_munition: { name: "弹药节点", icon: "bi bi-diamond" },
+                        node_fuel: { name: "燃料节点", icon: "bi bi-diamond" },
                     }
                 },
                 placeable: {
-                    name: "Add Placeable",
+                    name: "添加放置物",
                     items: {
-                        supply_50: {name: "Supplies (50)", icon: "bi bi-tools"},
-                        supply_50x2: {name: "Supplies (50 x 2)", icon: "bi bi-tools"},
-                        supply_100: {name: "Supplies (100)", icon: "bi bi-tools"},
-                        supply_150: {name: "Supplies (150)", icon: "bi bi-tools"},
-                        supply_150x2: {name: "Supplies (150 x 2)", icon: "bi bi-tools"},
-                        ammo_box: {name: "Ammo Box", icon: "bi bi-box2"},
-                        explosive_box: {name: "Explosive Box", icon: "bi bi-box2"},
-                        bandage_box: {name: "Bandage Box", icon: "bi bi-box2"},
-                        at_mine: {name: "AT Mine"},
-                        ap_mine: {name: "AP Mine"},
+                        supply_50: { name: "补给 (50)", icon: "bi bi-tools" },
+                        supply_50x2: { name: "补给 (50 x 2)", icon: "bi bi-tools" },
+                        supply_100: { name: "补给 (100)", icon: "bi bi-tools" },
+                        supply_150: { name: "补给 (150)", icon: "bi bi-tools" },
+                        supply_150x2: { name: "补给 (150 x 2)", icon: "bi bi-tools" },
+                        ammo_box: { name: "弹药补给", icon: "bi bi-box2" },
+                        explosive_box: { name: "爆炸物补给", icon: "bi bi-box2" },
+                        bandage_box: { name: "医疗箱", icon: "bi bi-box2" },
+                        at_mine: { name: "反坦克地雷" },
+                        ap_mine: { name: "反步兵地雷" },
                     }
                 },
                 marker: {
-                    name: "Add Marker",
+                    name: "添加标记",
                     icon: "bi bi-geo-alt",
                     items: {
-                        arty_full_aoe: {name: "Artillery with full AOE", icon: "bi bi-arrow-down"},
-                        enemy_garrison: {name: "Enemy Garrison", icon: "bi bi-flag"},
-                        enemy_infantry: {name: "Enemy Infantry"},
-                        enemy_outpost: {name: "Enemy Outpost", icon: "bi bi-triangle"},
-                        enemy_tank: {name: "Enemy Tank"},
-                        enemy_vehicle: {name: "Enemy Light Vehicle"},
+                        arty_full_aoe: { name: "炮兵全范围伤害", icon: "bi bi-arrow-down" },
+                        enemy_garrison: { name: "敌方据点", icon: "bi bi-flag" },
+                        enemy_infantry: { name: "敌方步兵" },
+                        enemy_outpost: { name: "敌方哨站", icon: "bi bi-triangle" },
+                        enemy_tank: { name: "敌方坦克" },
+                        enemy_vehicle: { name: "敌方轻型载具" },
                     }
                 },
                 ability: {
-                    name: "Add Command Ability",
+                    name: "添加指挥技能",
                     icon: "bi bi-telephone-outbound",
                     items: {
-                        supply_drop: {name: "Supply Drop", icon: "bi bi-box2"},
-                        ammo_drop: {name: "Ammo Drop", icon: "bi bi-box2"},
-                        airhead_drop: {name: "Airhead Drop", icon: "bi bi-triangle-fill"},
-                        reinforce: {name: "Reinforce", icon: "bi bi-people"},
+                        supply_drop: { name: "补给空投", icon: "bi bi-box2" },
+                        ammo_drop: { name: "弹药空投", icon: "bi bi-box2" },
+                        airhead_drop: { name: "空降点投放", icon: "bi bi-triangle-fill" },
+                        reinforce: { name: "增援", icon: "bi bi-people" },
                         // recon_plane: {name: "Recon Plane", icon: "bi bi-camera", disabled: true},
                         // precision_strike: {name: "Precision Strike", icon: "bi bi-arrow-down-circle"},
-                        strafing_run: {name: "Strafing Run", icon: "bi bi-file-arrow-up"},
-                        bombing_run: {name: "Bombing Run", icon: "bi bi-file-arrow-up"},
-                        katyusha_strike: {name: "Katyusha Strike", icon: "bi bi-arrow-down-circle"},
+                        strafing_run: { name: "扫射攻击", icon: "bi bi-file-arrow-up" },
+                        bombing_run: { name: "轰炸攻击", icon: "bi bi-file-arrow-up" },
+                        katyusha_strike: { name: "喀秋莎打击", icon: "bi bi-arrow-down-circle" },
                     }
                 },
                 objects: {
-                    name: "Add Custom Object",
+                    name: "添加自定义对象",
                     icon: "bi bi-bounding-box-circles",
                     items: {
-                        measure_radius: {name: "Measure Radius", icon: "bi bi-plus-circle-dotted"},
-                        measure_line: {name: "Measure Line", icon: "bi bi-rulers"},
-                        render_distance_radiuses: {name: "Render Distance Radiuses", icon: "bi bi-plus-circle-dotted"},
-                        rectangle: {name: "Rectangle", icon: "bi bi-square"},
-                        circle: {name: "Circle", icon: "bi bi-circle"},
-                        draw_polygon: {name: "Custom Polygon", icon: "bi bi-bounding-box-circles"},
-                        textbox: {name: "Textbox", icon: "bi bi-textarea-t"},
+                        measure_radius: { name: "测量半径", icon: "bi bi-plus-circle-dotted" },
+                        measure_line: { name: "测量线条", icon: "bi bi-rulers" },
+                        render_distance_radiuses: { name: "渲染距离半径", icon: "bi bi-plus-circle-dotted" },
+                        rectangle: { name: "矩形", icon: "bi bi-square" },
+                        circle: { name: "圆形", icon: "bi bi-circle" },
+                        draw_polygon: { name: "自定义多边形", icon: "bi bi-bounding-box-circles" },
+                        textbox: { name: "文本框", icon: "bi bi-textarea-t" },
                     }
                 },
-                cancel: {name: "Cancel"}
+                cancel: { name: "取消" }
             };
 
             $.contextMenu({
@@ -2728,7 +2728,7 @@ const mll = (function () {
                         menuActions[key]();
                     }
                 },
-                animation: {duration: 5, show: 'fadeIn', hide: 'fadeOut'},
+                animation: { duration: 5, show: 'fadeIn', hide: 'fadeOut' },
                 items: contextMenu
             });
 
@@ -2740,12 +2740,12 @@ const mll = (function () {
                     continue;
                 }
                 if (itemName === "garrison") {
-                    dblClickOptions.push("<option value='" + itemName + "'>Garrison</option>")
+                    dblClickOptions.push("<option value='" + itemName + "'>据点</option>")
 
                     elements.mobileContextBody.append(
                         "<button class='btn btn-link' style='margin: 10px 0' onclick='mll.mobileMenuAdd(\"" + itemName + "\")'>" +
                         (item.icon ? "<i class='" + item.icon + "'></i>" : "") +
-                        " Add Garrison</button>"
+                        " 添加据点</button>"
                     )
                     continue;
                 }
@@ -3006,10 +3006,10 @@ const mll = (function () {
             controls.fabricCanvas.on('object:moving', function (e) {
                 const p = e.target;
                 if (p && p.type && p.type.type === "measure-line-circle") {
-                    p.line1 && p.line1.set({'x2': p.left, 'y2': p.top});
-                    p.line2 && p.line2.set({'x1': p.left, 'y1': p.top});
-                    p.line3 && p.line3.set({'x1': p.left, 'y1': p.top});
-                    p.line4 && p.line4.set({'x1': p.left, 'y1': p.top});
+                    p.line1 && p.line1.set({ 'x2': p.left, 'y2': p.top });
+                    p.line2 && p.line2.set({ 'x1': p.left, 'y1': p.top });
+                    p.line3 && p.line3.set({ 'x1': p.left, 'y1': p.top });
+                    p.line4 && p.line4.set({ 'x1': p.left, 'y1': p.top });
 
                     const line = (p.line1 || p.line2 || p.line3 || p.line4);
                     const lineLength = distance(line.x1, line.y1, line.x2, line.y2);
@@ -3293,10 +3293,10 @@ const mll = (function () {
                 controls.fabricCanvas.isDrawingMode = !controls.fabricCanvas.isDrawingMode;
                 if (controls.fabricCanvas.isDrawingMode) {
                     setToolSelected('draw');
-                    drawingModeEl.text('Stop drawing mode');
+                    drawingModeEl.text('停止绘制模式');
                 } else {
                     setToolSelected('drag');
-                    drawingModeEl.text('Start drawing mode');
+                    drawingModeEl.text('开始绘制模式');
                 }
             });
 
@@ -3337,11 +3337,11 @@ const mll = (function () {
                     lockMovementX: true,
                     lockMovementY: true,
                 });
-                if (drawingStyle.val() === "Dashed") {
+                if (drawingStyle.val() === "虚线") {
                     e.path.set({
                         strokeDashArray: [3 * width, 2 * width]
                     });
-                } else if (drawingStyle.val() === "Dotted") {
+                } else if (drawingStyle.val() === "点线") {
                     e.path.set({
                         strokeDashArray: [1, 2 * width]
                     });
@@ -3623,7 +3623,7 @@ const mll = (function () {
                 zoom *= 0.999 ** delta;
                 if (zoom > 10) zoom = 10;
                 if (zoom < 0.15) zoom = 0.15;
-                controls.fabricCanvas.zoomToPoint({x: opt.e.offsetX, y: opt.e.offsetY}, zoom);
+                controls.fabricCanvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
                 opt.e.preventDefault();
                 opt.e.stopPropagation();
 
@@ -3723,7 +3723,7 @@ const mll = (function () {
                         const point = POINT_COORDS[filePrefix][x][y];
                         if (point == null) {
                             pointData["dataUrl"] = "";
-                            pointData["position"] = {top: 0, left: 0, width: 0, height: 0}
+                            pointData["position"] = { top: 0, left: 0, width: 0, height: 0 }
                             pointData["visible"] = false;
                         } else {
                             let top = 1920;
@@ -3760,7 +3760,7 @@ const mll = (function () {
                             }
 
                             pointData["dataUrl"] = tempCanvas.toDataURL();
-                            pointData["position"] = {top: top, left: left, width: width, height: height}
+                            pointData["position"] = { top: top, left: left, width: width, height: height }
                             pointData["visible"] = true;
                         }
 
@@ -3874,11 +3874,11 @@ const mll = (function () {
             }
 
             [controls.checkGrid, controls.checkArty, controls.checkStrongpoints, controls.checkInaccessible,
-                controls.checkEggs, controls.checkSpecial, controls.checkSectors, controls.checkSectorSwap, controls.checkPlacedElements,
-                controls.checkHideRadius, controls.checkArtyFlip, controls.checkSpResource, controls.checkDrawingsVisible,
-                controls.checkDefaults, controls.radioSideA, controls.radioBothSides, controls.radioSideB,
-                controls.checkOffensiveGarries, controls.checkArtillery, controls.checkTanks, controls.checkTrucks,
-                controls.checkCommandSpawn, controls.checkRepairStations,
+            controls.checkEggs, controls.checkSpecial, controls.checkSectors, controls.checkSectorSwap, controls.checkPlacedElements,
+            controls.checkHideRadius, controls.checkArtyFlip, controls.checkSpResource, controls.checkDrawingsVisible,
+            controls.checkDefaults, controls.radioSideA, controls.radioBothSides, controls.radioSideB,
+            controls.checkOffensiveGarries, controls.checkArtillery, controls.checkTanks, controls.checkTrucks,
+            controls.checkCommandSpawn, controls.checkRepairStations,
             ].forEach(function (control) {
                 control.change(function () {
                     internal.updateStatesAndRender();
@@ -3896,7 +3896,7 @@ const mll = (function () {
                     if (idx(["type", "saveKeepScale"], element)) {
                         continue;
                     }
-                    placed[i].set({scaleX: 1, scaleY: 1});
+                    placed[i].set({ scaleX: 1, scaleY: 1 });
                 }
 
                 $('<a>').attr({
@@ -4218,11 +4218,11 @@ const mll = (function () {
 
             const sectorBred = controls.checkSectorSwap.is(":checked");
             if (sectorBred) {
-                elements.sectorA.set({fill: sectorBlue});
-                elements.sectorB.set({fill: sectorRed});
+                elements.sectorA.set({ fill: sectorBlue });
+                elements.sectorB.set({ fill: sectorRed });
             } else {
-                elements.sectorA.set({fill: sectorRed});
-                elements.sectorB.set({fill: sectorBlue});
+                elements.sectorA.set({ fill: sectorRed });
+                elements.sectorB.set({ fill: sectorBlue });
             }
 
             const showDefaults = controls.checkDefaults.is(":checked");
@@ -4270,7 +4270,7 @@ const mll = (function () {
                             if (object.type.side === "enemy") {
                                 // blue to red
                                 const rotation = meta.filterRotation || 0.8097437437027739;
-                                object.filters = [new fabric.Image.filters.HueRotation({rotation: rotation})];
+                                object.filters = [new fabric.Image.filters.HueRotation({ rotation: rotation })];
                             } else {
                                 object.filters = [];
                             }

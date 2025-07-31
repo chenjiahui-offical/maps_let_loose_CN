@@ -1,27 +1,25 @@
-Build Documentation
+构建文档
 =
 
-### Setup
+### 环境设置
 
-Get a copy of the repository
+获取仓库副本
 
 ```
-git clone https://github.com/mattwright324/maps-let-loose.git
+git clone https://github.com/chenjiahui-offical/maps_let_loose_CN.git
 ```
 
-Install Ruby (and gems jekyll and bundler) following the steps for your operating system
+按照您的操作系统步骤安装 Ruby（以及 jekyll 和 bundler gems）
 
 - https://jekyllrb.com/docs/installation/
-    - Ruby+Devkit default settings
+    - Ruby+Devkit 默认设置
     - `gem install jekyll bundler`
 
-In CMD or terminal, cd to the project directory you cloned to and run `bundle install` to install necessary gems
-for github-pages in the project Gemfile (this may take some time).
+在命令提示符或终端中，cd 到您克隆的项目目录并运行 `bundle install` 来安装项目 Gemfile 中 github-pages 所需的 gems（这可能需要一些时间）。
 
-### Build and Run
+### 构建和运行
 
-In CMD or terminal, cd to the project directory you cloned to and run `bundle exec jekyll serve`
- and you can view a live version at http://localhost:4000
+在命令提示符或终端中，cd 到您克隆的项目目录并运行 `bundle exec jekyll serve`，
+然后您可以在 http://localhost:4000 查看实时版本
 
-Update the application with any editor you prefer (WebStorm, VSCode, Notepad++, etc.), Jekyll works such that edits to files
-made while it is running will be picked up and published only needing you to refresh the browser instance to see them.
+使用您喜欢的任何编辑器（WebStorm、VSCode、Notepad++ 等）更新应用程序，Jekyll 的工作方式是在运行时对文件所做的编辑会被自动检测并发布，您只需要刷新浏览器实例即可看到更改。

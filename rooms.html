@@ -1,18 +1,18 @@
 ---
 layout: default
-title: Rooms - Maps Let Loose
+title: 房间 - Maps Let Loose
 ---
 
 <div id="warning-panel" class="container session-panel mb-3" style="display:none">
-    <h4>Alert</h4>
+    <h4>警告</h4>
     <p id="warn-reason" style="margin:0"></p>
 </div>
 
 <div id="viewer-panel" class="container session-panel mb-3" style="display:none">
     <div class="row">
         <div class="col-md-1">
-            <h4>Viewer</h4>
-            <div title="Total Connected">
+            <h4>观察者</h4>
+            <div title="总连接数">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                      class="bi bi-people-fill" viewBox="0 0 16 16">
                     <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
@@ -22,14 +22,14 @@ title: Rooms - Maps Let Loose
                 </svg>
                 <small class="text-muted connected"></small>
             </div>
-            <div title="Editor count">
+            <div title="编辑者数量">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                      class="bi bi-pen-fill" viewBox="0 0 16 16">
                     <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"/>
                 </svg>
                 <small class="text-muted editors"></small>
             </div>
-            <div title="Viewer count">
+            <div title="观察者数量">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                      class="bi bi-eye-fill" viewBox="0 0 16 16">
                     <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
@@ -39,13 +39,13 @@ title: Rooms - Maps Let Loose
             </div>
         </div>
         <div class="col-auto">
-            <label class="form-label">Room</label>
+            <label class="form-label">房间</label>
             <div class="input-group">
                 <input type="text" class="room-id form-control" value="room-id" maxlength="50" readonly>
-                <button class="leave-room btn btn-sm btn-secondary">Leave</button>
+                <button class="leave-room btn btn-sm btn-secondary">离开</button>
             </div>
             <small class="text-muted">
-                Room will expire up to 24 hours of inactivity<br>(or when the instance restarts daily ~11pm UTC)
+                房间将在24小时无活动后过期<br>(或当实例每日重启时 ~UTC 11pm)
             </small>
         </div>
     </div>
@@ -54,8 +54,8 @@ title: Rooms - Maps Let Loose
 <div id="editor-panel" class="container session-panel mb-3" style="display:none">
     <div class="row">
         <div class="col-md-1">
-            <h4>Editor</h4>
-            <div title="Total Connected">
+            <h4>编辑者</h4>
+            <div title="总连接数">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                      class="bi bi-people-fill" viewBox="0 0 16 16">
                     <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
@@ -65,14 +65,14 @@ title: Rooms - Maps Let Loose
                 </svg>
                 <small class="text-muted connected"></small>
             </div>
-            <div title="Editor count">
+            <div title="编辑者数量">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                      class="bi bi-pen-fill" viewBox="0 0 16 16">
                     <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"/>
                 </svg>
                 <small class="text-muted editors"></small>
             </div>
-            <div title="Viewer count">
+            <div title="观察者数量">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                      class="bi bi-eye-fill" viewBox="0 0 16 16">
                     <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
@@ -82,88 +82,88 @@ title: Rooms - Maps Let Loose
             </div>
         </div>
         <div class="col-auto">
-            <label for="exampleInputEmail2" class="form-label">Room</label>
+            <label for="exampleInputEmail2" class="form-label">房间</label>
             <div class="input-group">
                 <input type="text" class="room-id form-control" id="exampleInputEmail2" maxlength="50" value="room-id"
                        readonly>
-                <button class="leave-room btn btn-sm btn-secondary">Leave</button>
+                <button class="leave-room btn btn-sm btn-secondary">离开</button>
             </div>
             <small class="text-muted">
-                Room will expire up to 24 hours of inactivity<br>(or when the instance restarts daily ~11pm UTC)
+                房间将在24小时无活动后过期<br>(或当实例每日重启时 ~UTC 11pm)
             </small>
         </div>
         <div class="col-auto">
-            <label class="form-label">Password</label>
+            <label class="form-label">密码</label>
             <div class="input-group" style="width: 300px;">
                 <input id="editor-viewer-pw" type="text" class="viewer-password form-control fake-password"
                        maxlength="50" style="width: 0;">
-                <button id="editor-update-pw" class="btn btn-sm btn-secondary update-password" disabled>Update</button>
-                <button class="btn btn-sm btn-secondary" data-clipboard-target="#editor-viewer-pw">Copy</button>
+                <button id="editor-update-pw" class="btn btn-sm btn-secondary update-password" disabled>更新</button>
+                <button class="btn btn-sm btn-secondary" data-clipboard-target="#editor-viewer-pw">复制</button>
             </div>
             <small class="text-muted">
-                Updating will kick all viewers unless blank.<br>
-                Blank is open to all.
+                更新将踢出所有观察者，除非留空。<br>
+                留空表示对所有人开放。
             </small>
         </div>
         <div class="col-auto">
-            <label class="form-label">Editor Key</label>
+            <label class="form-label">编辑者密钥</label>
             <div class="input-group">
                 <input id="editorKeyDisplay" type="text" class="editor-key form-control fake-password" maxlength="50"
                        style="width: 0;" readonly>
-                <button class="btn btn-sm btn-secondary" data-clipboard-target="#editorKeyDisplay">Copy</button>
+                <button class="btn btn-sm btn-secondary" data-clipboard-target="#editorKeyDisplay">复制</button>
             </div>
             <small class="text-muted">
-                Save this to join back as editor.
+                保存此密钥以重新加入为编辑者。
             </small>
         </div>
         <div class="col-auto">
-            <label class="form-label">Share Links</label>
+            <label class="form-label">分享链接</label>
             <div class="input-group">
-                <button id="copyViewerLink" class="btn btn-primary" style="height: 38px; font-size: 14px;">Copy Viewer Link</button>
-                <button id="copyEditorLink" class="btn btn-success" style="height: 38px; font-size: 14px;">Copy Editor Link</button>
+                <button id="copyViewerLink" class="btn btn-primary" style="height: 38px; font-size: 14px;">复制观察者链接</button>
+                <button id="copyEditorLink" class="btn btn-success" style="height: 38px; font-size: 14px;">复制编辑者链接</button>
             </div>
             <small class="text-muted">
-                Remove password from link if shared separately.
+                如果单独分享，请从链接中移除密码。
             </small>
         </div>
     </div>
 </div>
 
 <div id="join-panel" class="container mb-5">
-    <h4>Create or Join</h4>
+    <h4>创建或加入</h4>
     <p>
-        Want to share a live custom tacmap to an entire group?
-        Create a room and share the Room ID and Password.
-        Multiple editors are allowed.
+        想要与整个团队分享实时自定义战术地图？
+        创建一个房间并分享房间ID和密码。
+        允许多个编辑者。
     </p>
     <div class="row">
         <div class="col-md-4 mb-3">
-            <label class="form-label">Room ID</label>
+            <label class="form-label">房间ID</label>
             <input id="roomId" type="text" class="form-control" maxlength="50" placeholder="Map-Session-00000">
             <small class="text-muted">
-                Required. Room will expire up to 24 hours of inactivity<br>(or when the instance restarts daily ~11pm UTC)
+                必填。房间将在24小时无活动后过期<br>(或当实例每日重启时 ~UTC 11pm)
             </small>
         </div>
         <div class="col-md-4 mb-3">
-            <label class="form-label">Viewer Password</label>
+            <label class="form-label">观察者密码</label>
             <input id="viewerPassword" type="text" class="form-control fake-password" maxlength="50"
                    placeholder="hunter2">
             <small class="text-muted">
-                Optional.
-                Leave blank if session has no password.
+                可选。
+                如果会话没有密码请留空。
             </small>
         </div>
         <div class="col-md-4 mb-3">
-            <label class="form-label">Editor Key</label>
+            <label class="form-label">编辑者密钥</label>
             <input id="editorKey" type="text" class="form-control fake-password" maxlength="50"
                    placeholder="52ca7b0e-1bf8-49ad-9878-1dacb6348fde">
             <small class="text-muted">
-                Optional, required to become an editor for a map session.
-                If blank when creating a session, a random key will be generated.
+                可选，成为地图会话编辑者时必需。
+                创建会话时如果留空，将生成随机密钥。
             </small>
         </div>
     </div>
 
-    <button id="submitJoin" class="btn btn-primary" disabled>Create or Join</button>
+    <button id="submitJoin" class="btn btn-primary" disabled>创建或加入</button>
     <div id="joinError"></div>
 </div>
