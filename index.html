@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description"
+        content="快速为Hell Let Loose创建自定义战术地图。自定义可见点，添加驻军空降点和半履带车，切换和更改活跃区域，在地图上自由绘制，查看攻势默认驻军和最大炮兵射程。">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="build" content="2025-07-31T03:31:28+00:00">
+    <title>HLL战术地图分析</title>
+    <link rel="icon" href="./icon.png">
+
+    <!-- Dependencies -->
+    <link href="//cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.3/dist/css/bootstrap-nightshade.min.css" rel="stylesheet">
+    <link href="//cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="//cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        type="text/javascript"></script>
+    <script src="//cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="./fabric.min.js?v=2025-07-31T03:31:28+00:00" type="text/javascript"></script>
+    <script src="//cdn.jsdelivr.net/npm/socket.io-client@4.8.0/dist/socket.io.min.js" type="text/javascript"></script>
+    <script src="//cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/jszip-utils@0.1.0/dist/jszip-utils.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.min.js"></script>
+    <script src="./jquery-ui.min.js"></script>
+
+    <!-- Apps -->
+    <link href="./styles.css?v=2025-07-31T03:31:28+00:00" rel="stylesheet" />
+    <script src="./data.js?v=2025-07-31T03:31:28+00:00" type="text/javascript"></script>
+    <script src="./script.js?v=2025-07-31T03:31:28+00:00" type="text/javascript"></script>
+
+    <!-- Analytics -->
+    <script defer data-domain="mattw.io" src="https://plausible.io/js/plausible.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light mb-3" style="border-bottom: 1px solid rgba(127,127,127,0.1);">
+        <span class="container">
+            <div class="navbar-brand">
+                <img src="./icon.png" alt="" class="d-inline-block align-text-top"><span
+                    style="padding-left: .75rem;">HLL战术地图分析</span>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="切换导航">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="./">单人</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./rooms">房间</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            工具集
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="https://chenjiahui-offical.github.io/maps_let_loose_CN/">
+                                    <img width=20 src="https://chenjiahui-offical.github.io/maps_let_loose_CN/icon.png">
+                                    HLL战术地图分析
+                                </a></li>
+                            <li><a class="dropdown-item" href="https://mattw.io/hll-engineer-calc/">
+                                    <img width=20 src="https://mattw.io/hll-engineer-calc/icon.png">
+                                    HLL 工程师计算器
+                                </a></li>
+                            <li><a class="dropdown-item" href="https://mattw.io/hll-map-rotation/">
+                                    <img width=20 src="https://mattw.io/hll-map-rotation/icon.png">
+                                    HLL 地图轮换生成器
+                                </a></li>
+                            <li><a class="dropdown-item" href="https://mattw.io/hll-server-browser/">
+                                    <img width=20 src="https://mattw.io/hll-server-browser/icon.png">
+                                    HLL 服务器浏览器 (概念版)
+                                </a></li>
+                            <li><a class="dropdown-item" href="https://mattw.io/hll-sound-guide/">
+                                    <img width=20 src="https://mattw.io/hll-sound-guide/icon.png">
+                                    HLL 声音指南
+                                </a></li>
+                            <li><a class="dropdown-item" href="https://mattw.io/strats-let-loose/">
+                                    <img width=20 src="https://mattw.io/strats-let-loose/icon.png">
+                                    战术解放
+                                </a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="navbar-text" style="font-size:0.65em; margin-right: 10px;">
+                    <span style="margin-left: 31px">合作伙伴</span>
+                    <br>加入 <a target="_blank" href="https://discord.gg/glows">Glow's Discord</a>
+                </div>
+                <div class="navbar-text">
+                    <a target="_blank" href="https://discord.gg/glows">
+                        <img src="./glowssmall.png" style="height: 40px;">
+                    </a>
+                </div>
+            </div>
+        </span>
+    </nav>
+
+    <style>
+        #mobileContextModal .btn-link {
+            width: 100%;
+            text-decoration: none;
+        }
+
+        #mobileContextModal .accordion * {
+            background-color: transparent;
+            border-radius: 0;
+        }
+    </style>
+    <div class="modal fade" id="mobileContextModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body" style="padding: 0;" id="mobileContextBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <div id="side-menu" class="container-fluid mb-5">
+        <div class="row">
+            <div id="menu-panel" class="col col-lg-3" style="user-select: none">
+                <div class="mb-3 editor-only">
+                    <h4>选择地图</h4>
+                    <select class="form-select" id="map-select">
+                        <option value="Carentan">卡朗唐</option>
+                        <option value="Driel">德里尔</option>
+                        <option value="ElAlamein">阿拉曼</option>
+                        <option value="Elsenborn">埃尔森博恩岭</option>
+                        <option value="Foy">佛伊</option>
+                        <option value="Hill400">400高地</option>
+                        <option value="HurtgenV2">许特根森林</option>
+                        <option value="Kharkov">哈尔科夫</option>
+                        <option value="Kursk">库尔斯克</option>
+                        <option value="Mortain">莫尔坦</option>
+                        <option value="Omaha">奥马哈海滩</option>
+                        <option value="PHL">紫心小道</option>
+                        <option value="Remagen">雷马根</option>
+                        <option value="SMDMV2">圣玛丽德蒙特</option>
+                        <option value="SME">圣梅尔艾格里斯</option>
+                        <option value="Stalingrad">斯大林格勒</option>
+                        <option value="Tobruk">托布鲁克</option>
+                        <option value="Utah">犹他海滩</option>
+                    </select>
+                </div>
+
+                <div class="accordion accordion-flush mb-3">
+                    <div class="accordion-item editor-only">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                aria-controls="flush-collapseOne">
+                                切换元素
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse collapse  show"
+                            aria-labelledby="flush-headingOne">
+                            <div class="accordion-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="grid-visible" checked>
+                                    <label class="form-check-label" for="grid-visible">
+                                        显示网格
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="placed-visible"
+                                        checked>
+                                    <label class="form-check-label" for="placed-visible">
+                                        已放置的地图元素
+                                    </label>
+                                    <p style="margin-bottom: 0">
+                                        <small class="text-muted">双击或右键点击地图</small>
+                                    </p>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="garry-radius-visible">
+                                    <label class="form-check-label" for="garry-radius-visible">
+                                        隐藏出生点半径
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="arty-visible">
+                                    <label class="form-check-label" for="arty-visible">
+                                        显示炮兵射程
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flip-arty">
+                                    <label class="form-check-label" for="flip-arty">
+                                        翻转炮兵射程
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="zoom-scale" checked>
+                                    <label class="form-check-label" for="zoom-scale">
+                                        缩放比例元素
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="inaccessible-visible">
+                                    <label class="form-check-label" for="inaccessible-visible">
+                                        显示可达性覆盖层 (开发中)
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="eggs-visible">
+                                    <label class="form-check-label" for="eggs-visible">
+                                        显示彩蛋覆盖层 (开发中)
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="special-visible">
+                                    <label class="form-check-label" for="special-visible">
+                                        显示特殊建筑覆盖层 (开发中)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item editor-only">
+                        <h2 class="accordion-header" id="flush-headingSix">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapseSix" aria-expanded="false"
+                                aria-controls="flush-collapseSix">
+                                切换默认设置
+                            </button>
+                        </h2>
+                        <div id="flush-collapseSix" class="accordion-collapse collapse show"
+                            aria-labelledby="flush-headingSix">
+                            <div class="accordion-body">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaults-visible">
+                                    <label class="form-check-label" for="defaults-visible">
+                                        显示选中的默认设置
+                                    </label>
+                                </div>
+                                <div class="btn-group mb-3" role="group" aria-label="Basic radio toggle button group">
+                                    <input type="radio" class="btn-check" name="btnradio" id="radioSideA"
+                                        autocomplete="off">
+                                    <label class="btn btn-outline-secondary" for="radioSideA">A方</label>
+
+                                    <input type="radio" class="btn-check" name="btnradio" id="radioBoth"
+                                        autocomplete="off" checked>
+                                    <label class="btn btn-outline-secondary" for="radioBoth">双方</label>
+
+                                    <input type="radio" class="btn-check" name="btnradio" id="radioSideB"
+                                        autocomplete="off">
+                                    <label class="btn btn-outline-secondary" for="radioSideB">B方</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="offensivegarry-visible"
+                                        checked>
+                                    <label class="form-check-label" for="offensivegarry-visible">
+                                        进攻方据点
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="artypos-visible"
+                                        checked>
+                                    <label class="form-check-label" for="artypos-visible">
+                                        炮兵阵地
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="tanks-visible" checked>
+                                    <label class="form-check-label" for="tanks-visible">
+                                        坦克
+                                    </label>
+                                </div>
+                                <div class="form-check" title="补给和运输卡车">
+                                    <input class="form-check-input" type="checkbox" value="" id="trucks-visible">
+                                    <label class="form-check-label" for="trucks-visible">
+                                        卡车
+                                    </label>
+                                </div>
+                                <div class="form-check" title="由半履带车代表，但可以是任何载具">
+                                    <input class="form-check-input" type="checkbox" value="" id="commandspawn-visible">
+                                    <label class="form-check-label" for="commandspawn-visible">
+                                        指挥出生载具
+                                    </label>
+                                </div>
+                                <div class="form-check" hidden>
+                                    <input class="form-check-input" type="checkbox" value="" id="ammodepot-visible">
+                                    <label class="form-check-label" for="ammodepot-visible">
+                                        弹药库
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="repairstation-visible">
+                                    <label class="form-check-label" for="repairstation-visible">
+                                        维修站
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item editor-only">
+                        <h2 class="accordion-header" id="flush-headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapseThree" aria-expanded="false"
+                                aria-controls="flush-collapseThree">
+                                强化点
+                            </button>
+                        </h2>
+                        <div id="flush-collapseThree" class="accordion-collapse collapse show"
+                            aria-labelledby="flush-headingThree">
+                            <div class="accordion-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="sp-visible" checked>
+                                    <label class="form-check-label" for="sp-visible">
+                                        显示强化点
+                                    </label>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" value="" id="sp-resource-visible"
+                                        checked>
+                                    <label class="form-check-label" for="sp-resource-visible">
+                                        显示强化点名称
+                                    </label>
+                                </div>
+                                <div id="sp-grid" class="mb-3"></div>
+                                <div class="mb-3">
+                                    <a id="enableAll" href="javascript:" style="margin-right: 10px">全部启用</a>
+                                    <a id="disableAll" href="javascript:">全部禁用</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item editor-only">
+                        <h2 class="accordion-header" id="flush-headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapseFour" aria-expanded="false"
+                                aria-controls="flush-collapseFour">
+                                占领区域
+                            </button>
+                        </h2>
+                        <div id="flush-collapseFour" class="accordion-collapse collapse show"
+                            aria-labelledby="flush-headingFour">
+                            <div class="accordion-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="sector-visible">
+                                    <label class="form-check-label" for="sector-visible">
+                                        显示区域
+                                    </label>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" value="" id="swap-sector-color">
+                                    <label class="form-check-label" for="swap-sector-color">
+                                        交换区域颜色
+                                    </label>
+                                </div>
+                                <input type="range" class="form-range" min="0" max="6" value="3" id="sector-range">
+
+                                <small class="text-muted">
+                                    Ctrl+左键向左或向上移动区域
+                                    <br>
+                                    Ctrl+右键向右或向下移动区域
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingFive">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapseFive" aria-expanded="false"
+                                aria-controls="flush-collapseFive">
+                                导出
+                            </button>
+                        </h2>
+                        <div id="flush-collapseFive" class="accordion-collapse collapse show"
+                            aria-labelledby="flush-headingFive">
+                            <div class="accordion-body">
+                                <button id="save" class="btn btn-secondary">
+                                    <i class="bi bi-image"></i>
+                                    保存为PNG
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="canvas-panel" class="col col-lg-6 mb-3 ">
+                <input hidden id="title" type="text" value="未命名"
+                    style="border: none; background-color: transparent; color: white; font-size: 22px; width: 100%; margin-bottom: 5px;"
+                    readonly>
+                <div id="tools-panel" class="row editor-only" style="margin-bottom: 8px;">
+                    <style>
+                        .w-auto {
+                            width: auto;
+                            padding: 2px 6px;
+                        }
+
+                        .tool {
+                            cursor: pointer;
+                            width: auto;
+                            color: orange;
+                            padding: 2px 6px;
+                            border: 2px solid transparent;
+                        }
+
+                        .tool.selected {
+                            border: 2px dotted white;
+                            border-radius: 25px;
+                        }
+                    </style>
+                    <div class="col col-auto">
+                        <span style="font-size: 18px">工具</span>
+                    </div>
+                    <div class="col col-auto">
+                        <div class="row">
+                            <span id="tool-drag" class="tool selected" title="导航和选择 (Shift+W)">
+                                <i class="bi bi-hand-index-thumb"></i>
+                            </span>
+                            <span id="tool-draw" class="tool" title="自由绘制 (Shift+D)">
+                                <i class="bi bi-brush"></i>
+                            </span>
+                            <span id="tool-erase" class="tool" title="橡皮擦 (Shift+E)">
+                                <i class="bi bi-eraser"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col col-auto">
+                        <span style="font-size: 18px">双击</span>
+                    </div>
+                    <div class="col col-auto">
+                        <div class="row">
+                            <select id="dbl-click-element" class="form-select form-select-sm">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col col-auto">
+                        <span style="font-size: 18px">元素</span>
+                    </div>
+                    <div class="col col-auto">
+                        <div class="row">
+                            <span class="w-auto"><a id="remove-all-elements" href="javascript:">清除</a></span>
+                            <span class="w-auto"><a id="undo-last-element" href="javascript:">移除最后一个</a></span>
+                        </div>
+                    </div>
+                    <div class="col col-auto">
+                        <span style="font-size: 18px">绘图</span>
+                    </div>
+                    <div class="col col-auto">
+                        <div class="row">
+                            <span class="w-auto"><a id="clear-paths" href="javascript:">清除</a></span>
+                            <span class="w-auto"><a id="undo-path" href="javascript:">移除最后一个</a></span>
+                        </div>
+                    </div>
+                </div>
+                <div id="canvas-container">
+                    <canvas id="canvas" class="hasmenu drag-mode"></canvas>
+                </div>
+            </div>
+
+            <div id="extra-panel" class="col col-lg-3">
+                <div class="accordion accordion-flush mb-3">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingA">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapseA" aria-expanded="false" aria-controls="flush-collapseA">
+                                地图配置
+                            </button>
+                        </h2>
+                        <div id="flush-collapseA" class="accordion-collapse collapse show"
+                            aria-labelledby="flush-headingA">
+                            <div class="accordion-body">
+                                <div style="margin-bottom: 10px">
+                                    <button id="createConfigs" class="btn btn-secondary editor-only"
+                                        data-bs-toggle="modal" data-bs-target="#slidesCreateModal">创建</button>
+                                    <button id="manageConfigs" class="btn btn-secondary editor-only"
+                                        data-bs-toggle="modal" data-bs-target="#slidesManageModal">管理</button>
+                                    <button id="import" class="btn btn-secondary editor-only"
+                                        onclick="document.getElementById('importFileChooser').click()">
+                                        <span class="spinner"><span class="spinner-border spinner-border-sm"
+                                                role="status"></span></span>
+                                        <i class="bi bi-upload"></i>&nbsp;&nbsp;导入
+                                        <input id="importFileChooser" type="file"
+                                            accept="zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed"
+                                            hidden />
+                                    </button>
+                                    <button id="export" class="btn btn-secondary">
+                                        <span class="spinner"><span class="spinner-border spinner-border-sm"
+                                                role="status"></span></span>
+                                        <span class="text"><i class="bi bi-download"></i>&nbsp;&nbsp;导出</span>
+                                    </button>
+                                </div>
+                                <select id="configsSelect" class="form-select" size="5"
+                                    aria-label="size 3 select example">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="slidesCreateModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog  modal-dialog-scrollable modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">创建配置</h1>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>
+                                            使用配置作为基础创建新配置：
+                                        </p>
+                                        <p>
+                                            <select id="selectBaseConfig" class="form-select"
+                                                aria-label="Default select example">
+                                            </select>
+                                        </p>
+                                        <p>
+                                            <script>
+                                                function addLine() {
+                                                    const slideCount = $(".new-slide").length;
+
+                                                    $("#new-slides").append("<div class='input-group new-slide' id='newslide-" + slideCount + "'>" +
+                                                        "<input type='text' class='form-control' value='地图配置 " + slideCount + "'>" +
+                                                        "<button class='btn btn-link' onclick='removeLine(" + slideCount + ")'>" +
+                                                        "<i class='bi bi-trash-fill'></i>" +
+                                                        "</button>" +
+                                                        "</div>");
+                                                }
+
+                                                function removeLine(num) {
+                                                    $("#newslide-" + num).remove();
+                                                }
+                                            </script>
+                                            <button id="addNewSlide" class="btn btn-secondary"
+                                                onclick="addLine()">添加行</button>
+                                        </p>
+                                        <div id="new-slides">
+                                            <div class="input-group new-slide" id="newslide-0">
+                                                <input type="text" class="form-control" value="地图配置 0">
+
+                                                <button class="btn btn-link" onclick="removeLine(0)">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="submitCreateSlides" type="button" class="btn btn-primary"
+                                            data-bs-dismiss="modal">创建</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">取消</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="slidesManageModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog  modal-dialog-scrollable modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel2">管理配置</h1>
+                                    </div>
+                                    <div class="modal-body" id="manage-slides-list">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="updateSlides" type="button" class="btn btn-primary"
+                                            data-bs-dismiss="modal">更新</button>
+                                        <button id="cancelUpdate" type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">取消</button>
+                                    </div>
+                                    <script>
+                                        $("#manage-slides-list").sortable()
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="slidesImportModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog  modal-dialog-scrollable modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel3">导入配置</h1>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>
+                                            正在导入: <strong id="importFileName"></strong>
+                                        </p>
+                                        <p>
+                                            包含 <span id="configCount">0</span> 个配置:
+                                            <span id="configNewCount">0</span> 个新配置和
+                                            <span id="configMatchingCount">0</span> 个匹配ID的配置
+                                        </p>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                                id="importRemoveAllAddNew" checked>
+                                            <label class="form-check-label" for="importRemoveAllAddNew">
+                                                移除所有当前配置并添加新配置
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                                id="importAddOverwiteAll">
+                                            <label class="form-check-label" for="importAddOverwiteAll">
+                                                添加并覆盖所有配置
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                                id="importAddOverwriteSelect">
+                                            <label class="form-check-label" for="importAddOverwriteSelect">
+                                                选择要添加和覆盖的配置
+                                            </label>
+                                        </div>
+                                        <div id="importConfigList"
+                                            style="overflow: scroll; max-height: 300px; padding: 20px; border-radius: 8px; border: 1px dashed lightgray; margin-top: 10px;">
+                                            <div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" checked>
+                                                    <label class="form-check-label">
+                                                        Carentan - Base Layout
+                                                    </label>
+                                                </div>
+                                                <p>
+                                                    Carentan · 3 points · 0 drawings · 0 elements
+                                                    <br>
+                                                    <small class="text-muted">
+                                                        8cf968ad-b8c8-4658-b9e9-6b37699f3006 (id match)
+                                                    </small>
+                                                    <br>
+                                                    <strong>覆盖: 卡朗唐 - 基础布局</strong>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" checked>
+                                                    <label class="form-check-label">
+                                                        卡朗唐 - 据点
+                                                    </label>
+                                                </div>
+                                                <p>
+                                                    卡朗唐 · 3个据点 · 0个绘图 · 0个元素
+                                                    <br>
+                                                    <small class="text-muted">
+                                                        ed63f03c-02f5-4bef-b9ee-cf1fb8891324 (ID匹配)
+                                                    </small>
+                                                    <br>
+                                                    <strong>覆盖: 卡朗唐 - 据点</strong>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" checked>
+                                                    <label class="form-check-label">
+                                                        卡朗唐 - 反坦克炮
+                                                    </label>
+                                                </div>
+                                                <p>
+                                                    卡朗唐 · 3个据点 · 0个绘图 · 个元素
+                                                    <br>
+                                                    <small class="text-muted">
+                                                        4662370f-a5e7-43d7-9d28-f54367ae5324
+                                                    </small>
+                                                    <br>
+                                                    <strong>添加新配置</strong>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" checked>
+                                                    <label class="form-check-label">
+                                                        默认
+                                                    </label>
+                                                </div>
+                                                <p>
+                                                    卡朗唐 · 3个据点 · 0个绘图 · 12个元素
+                                                    <br>
+                                                    <small class="text-muted">
+                                                        无ID
+                                                    </small>
+                                                    <br>
+                                                    <strong>添加新配置</strong>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div style="text-align: center">
+                                            <a href="javascript:" style="margin-right: 20px"
+                                                onclick="$('#importConfigList input').prop('checked', true)">全选</a>
+                                            <a href="javascript:"
+                                                onclick="$('#importConfigList input').prop('checked', false)">全不选</a>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="submitImport" type="button" class="btn btn-primary"
+                                            data-bs-dismiss="modal">
+                                            导入
+                                        </button>
+                                        <button id="cancelImport" type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">
+                                            取消
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item editor-only">
+                        <h2 class="accordion-header" id="flush-headingB">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapseB" aria-expanded="false" aria-controls="flush-collapseB">
+                                自定义元素
+                            </button>
+                        </h2>
+                        <div id="flush-collapseB" class="accordion-collapse collapse show"
+                            aria-labelledby="flush-headingB">
+                            <div class="accordion-body">
+                                <small class="text-muted" id="no-selection">
+                                    未选择可自定义元素。
+                                    <br><br>
+                                    矩形、圆形和文本框可以更改为任何背景颜色、文本颜色和透明度。
+                                    <br><br>
+                                    某些元素也可以从蓝色更改为红色以表示敌军。
+                                </small>
+
+                                <div id="edit-shape" style="display: none">
+                                    <div id="fill-opacity-div">
+                                        <label for="shape-opacity">填充透明度
+                                            (<span id="shape-opacity-value">7</span>)
+                                        </label>
+                                        <br>
+                                        <input id="shape-opacity" type="range" class="form-range" value="0.35" min="0"
+                                            max="1" step="0.05">
+                                        <br>
+                                    </div>
+
+                                    <label for="shape-color">颜色 </label>
+                                    <br>
+                                    <div id="shape-color-div" class="d-flex align-items-center">
+                                        <input type="color" value="#0080ff" id="shape-color">
+                                        <span>或快速选择</span>
+                                        <script>
+                                            function setColorsAndOpacity(shapeColor, shapeOpacity, textColor) {
+                                                const inputShapeColor = $("#shape-color");
+                                                const inputTextColor = $("#text-color");
+                                                const inputShapeOpacity = $('#shape-opacity');
+
+                                                if (shapeColor !== inputShapeColor.val()) {
+                                                    inputShapeColor.val(shapeColor).trigger('change');
+                                                }
+
+                                                if (inputTextColor.is(":visible")) {
+                                                    if (textColor !== inputTextColor.val()) {
+                                                        inputTextColor.val(textColor).trigger('change');
+                                                    }
+                                                    if (inputShapeOpacity !== 0.8) {
+                                                        inputShapeOpacity.val(0.8).trigger('input');
+                                                    }
+                                                } else {
+                                                    if (inputShapeOpacity !== shapeOpacity) {
+                                                        inputShapeOpacity.val(shapeOpacity).trigger('input');
+                                                    }
+                                                }
+                                            }
+                                        </script>
+                                        <span class="color blue" title="蓝色" style="color: #ffffff"
+                                            onclick="setColorsAndOpacity('#0080ff', 0.5, '#ffffff')">T</span>
+                                        <span class="color red" title="红色" style="color: #ffffff"
+                                            onclick="setColorsAndOpacity('#ff8080', 0.5, '#ffffff')">T</span>
+
+                                        <span class="color" style="background-color:#ff8000; color: #000000" title="橙色"
+                                            onclick="setColorsAndOpacity('#ff8000', 0.5, '#000000')">T</span>
+                                        <span class="color" style="background-color:#ffff80; color: #000000" title="黄色"
+                                            onclick="setColorsAndOpacity('#ffff80', 0.5, '#000000')">T</span>
+                                        <span class="color" style="background-color:#00ff00; color: #000000" title="绿色"
+                                            onclick="setColorsAndOpacity('#00ff00', 0.5, '#000000')">T</span>
+                                        <span class="color" style="background-color:#8000ff; color: #ffffff" title="紫色"
+                                            onclick="setColorsAndOpacity('#8000ff', 0.5, '#ffffff')">T</span>
+                                        <span class="color" style="background-color:#ffffff; color: #000000" title="白色"
+                                            onclick="setColorsAndOpacity('#ffffff', 0.5, '#000000')">T</span>
+                                        <span class="color" style="background-color:#c0c0c0; color: #000000" title="灰色"
+                                            onclick="setColorsAndOpacity('#c0c0c0', 0.5, '#000000')">T</span>
+                                    </div>
+                                    <br>
+                                    <div id="text-color-div" class="text" style="display: none">
+                                        <label for="text-color">文本颜色 </label>
+                                        <br>
+                                        <div class="d-flex align-items-center">
+                                            <input type="color" id="text-color" value="#ffffff">
+                                            <span>or quick</span>
+                                            <span class="color" style="background-color:#ffffff"
+                                                onclick="$('#text-color').val('#ffffff').trigger('change')"></span>
+                                            <span class="color" style="background-color:#000000"
+                                                onclick="$('#text-color').val('#000000').trigger('change')"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="edit-asset" style="display: none">
+                                    <label>阵营 (友军/敌军)</label>
+                                    <br>
+                                    <span class="color blue asset-side selected" title="友军" id="assetFriendly"></span>
+                                    <span class="color red asset-side" title="敌军" id="assetEnemy"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item editor-only">
+                        <h2 class="accordion-header" id="flush-headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                                aria-controls="flush-collapseTwo">
+                                自由绘制
+                            </button>
+                        </h2>
+                        <div id="flush-collapseTwo" class="accordion-collapse collapse show"
+                            aria-labelledby="flush-headingTwo">
+                            <div class="accordion-body">
+                                <div style="display: inline-block;">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" value="" id="drawing-visible"
+                                            checked>
+                                        <label class="form-check-label" for="drawing-visible">
+                                            显示绘图
+                                        </label>
+                                    </div>
+                                    <div style="margin: 5px 0">
+                                        <button id="drawing-mode" type="button" class="btn btn-secondary">开始绘制模式
+                                        </button>
+                                    </div>
+                                    <small class="text-muted">
+                                        Shift+D 快速切换绘制模式
+                                        <br>
+                                        Shift+拖拽 创建直线
+                                    </small>
+
+                                    <div style="margin: 5px 0;">
+                                        <label for="drawing-line-width">线条宽度
+                                            (<span id="line-width-value">7</span>)
+                                        </label>
+                                        <br>
+                                        <input type="range" class="form-range" value="7" min="3" max="25"
+                                            id="drawing-line-width"><br>
+
+                                        <label for="drawing-color">线条样式 </label>
+                                        <br>
+                                        <select id="drawing-style" class="form-select" style="margin-bottom: 7px;">
+                                            <option selected>实线</option>
+                                            <option>虚线</option>
+                                            <option>点线</option>
+                                        </select>
+                                        <label for="drawing-color">线条颜色 </label>
+                                        <div id="line-color-div" class="d-flex">
+                                            <input type="color" value="#0080ff" id="drawing-color">
+                                            <span>or quick</span>
+                                            <span class="color blue" title="Blue"
+                                                onclick="$('#drawing-color').val('#0080ff').trigger('change')"></span>
+                                            <span class="color red" title="Red"
+                                                onclick="$('#drawing-color').val('#ff8080').trigger('change')"></span>
+
+                                            <span class="color" style="background-color:#ff8000" title="Orange"
+                                                onclick="$('#drawing-color').val('#ff8000').trigger('change')"></span>
+                                            <span class="color" style="background-color:#ffff80" title="Yellow"
+                                                onclick="$('#drawing-color').val('#ffff80').trigger('change')"></span>
+                                            <span class="color" style="background-color:#00ff00" title="Green"
+                                                onclick="$('#drawing-color').val('#00ff00').trigger('change')"></span>
+                                            <span class="color" style="background-color:#8000ff" title="Purple"
+                                                onclick="$('#drawing-color').val('#8000ff').trigger('change')"></span>
+
+                                            <span class="color" style="background-color:#ffffff" title="White"
+                                                onclick="$('#drawing-color').val('#ffffff').trigger('change')"></span>
+                                            <span class="color" style="background-color:#c0c0c0" title="Gray"
+                                                onclick="$('#drawing-color').val('#c0c0c0').trigger('change')"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <h4>详细信息</h4>
+        <ul>
+            <li>总共有3^5或243种潜在的目标配置</li>
+            <li>
+                攻防模式允许所有243种配置，无限制，允许对立两侧的连续据点。
+                <br>
+                <img src="./assets/offensive-ok.png" width="200">
+            </li>
+            <li>
+                冲突模式只允许99种配置，因为它移除了对立两侧的任何连续据点。
+                <br>
+                <img src="./assets/warfare-not-ok.png" width="200">
+            </li>
+            <li>
+                理论上动态团队出生点限制为12个：最多8个据点、最多3个半履带车和1个空降点。
+            </li>
+            <li>
+                理论上总载具限制为24辆：每方7辆默认载具 + 每方5辆指挥官可生成载具。
+            </li>
+            <li>
+                几乎所有出生点都有50米警告半径，当敌人进入半径内时会变"红"，
+                无论它们放置在哪里。
+            </li>
+            <li>攻防模式是例外，在红区放置时有100米锁定半径</li>
+            <li>
+                攻防模式中只会出现一套默认据点，将是距离攻击方最近的三个
+            </li>
+            <li>攻防模式默认据点只能通过徒手、炸药包、燃烧瓶、火焰喷射器或反坦克手榴弹摧毁</li>
+            <li>玩家渲染距离为500米。载具渲染距离为1000米。</li>
+            <li>
+                炮兵散布半径为20米。命中周围的影响区域半径为15米。
+                总潜在影响区域半径为35米。
+            </li>
+            <li>服务器以20Hz刷新率运行。</li>
+            <li>此应用程序的距离测量基于190像素接近200米或一个网格方块</li>
+            <li>由Winston [HR]开发</li>
+            <li>战术地图和一些资源不是我的，属于或基于Black Matter和Team 17拥有的内容。</li>
+        </ul>
+    </div>
+
+    <div class="container mb-5">
+        <h4>地图下载</h4>
+        <p>
+            Google Drive收集了所有战术地图以及在此项目期间制作的修改版本。
+            原始战术地图可以从官方HLL Discord的<i>#hll-tacmaps</i>频道获取。
+        </p>
+        <ul>
+            <li><a target="_blank"
+                    href="https://drive.google.com/drive/folders/1Ob8vprqHc953rgCJPfNPMG3VNj51B8qE?usp=sharing">
+                    所有15张战术地图 (无网格)
+                </a></li>
+            <li><a target="_blank"
+                    href="https://drive.google.com/drive/folders/1--1a4qypC3Ygr_d_gQfKuoEVUfOuQ4BL?usp=sharing">
+                    所有15张战术地图 (有网格)
+                </a></li>
+            <li><a target="_blank"
+                    href="https://drive.google.com/drive/folders/1jh-LchMt335WcxhoevW1hjQdpmLLN7CD?usp=sharing">
+                    所有15张战术地图 (网格，据点)
+                </a></li>
+            <li><a target="_blank"
+                    href="https://drive.google.com/drive/folders/1KTFLvtiQ3is9Q7GzFXTbnaRsxDLH7QAA?usp=sharing">
+                    所有15张战术地图 (网格，标记默认攻防据点)
+                </a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h4>其他资源</h4>
+        <p>Hell Let Loose相关的其他实用链接</p>
+        <ul>
+            <li>
+                <a target="_blank" href="https://store.steampowered.com/news/app/686810/view/2998819983302580037">
+                    终极新手指南 (PC)
+                </a> 还有
+                <a target="_blank" href="https://bit.ly/HLLNewPlayerGuidePS5">
+                    PS5版
+                </a> 和 <a target="_blank" href="https://bit.ly/HLLNewPlayerGuideXboxSeriesSandX">
+                    Xbox版
+                </a>
+            </li>
+            <li><a target="_blank" href="https://imgur.com/gallery/YyICmzi">
+                    HLL 概念卡片
+                </a></li>
+            <li><a target="_blank" href="https://www.theline.gg/tankbible">
+                    坦克圣经
+                </a></li>
+            <li><a target="_blank" href="https://icilia95.wixsite.com/tankopedia">
+                    坦克百科
+                </a></li>
+            <li><a target="_blank"
+                    href="https://docs.google.com/spreadsheets/d/1eN4f7J_4jXreYCdaU082kOdaYTFAsPp7tZvMY7vgKrM/edit#gid=0">
+                    <!-- Old (U12) https://docs.google.com/spreadsheets/d/1a1gDyMqncOqPwsQq05ueGRQwLwDAG_Yy2beAmNXRbJA -->
+                    Hell Let Loose 计分表 (U14.5)
+                </a></li>
+            <li>
+                <a target="_blank" href="https://imgur.com/a/JlHnPuj">铁拳</a> 和
+                <a target="_blank" href="https://imgur.com/a/OoNdUtJ">火箭筒</a> 远程瞄准指南
+            </li>
+            <li>
+                <!--
+                Formula USA & GER: (distance - 4224.25) / -4.21781
+                Formula Soviet   : (distance * -0.21338) + 1141.375
+                {distance} range is from 100 to 1600
+            -->
+                <!-- Alternate: https://docs.google.com/spreadsheets/d/1kwOgnKsci4FMIiI85TxZ-RFiIjxpBo12eGGiI4KoCRU/edit -->
+                <a target="_blank"
+                    href="https://docs.google.com/spreadsheets/d/1h2y3-D8Cf_PKsvbOJcSZ_-P00MfreQ_G8n7aK-YNXyc/edit">美/德</a>
+                和
+                <a target="_blank"
+                    href="https://docs.google.com/spreadsheets/d/1NinILd2i9JWiOxWVZFmMVoTFNMfaHYK8d0NZOVIWzlg/edit">苏联</a>
+                炮兵密位图表
+            </li>
+            <li><a target="_blank" href="https://www.easyarty.com/">
+                    Easy Arty - 简单炮兵计算器
+                </a></li>
+            <li><a target="_blank" href="https://www.hell-let-loose-calculator.com/#/">
+                    Hell Let Loose 计算器 - 交互式地图炮兵计算器
+                </a></li>
+            <li><a target="_blank" href="https://worldwarways.web.app/#/">
+                    World War Ways - 交互式地图驾驶路线
+                </a></li>
+            <li><a target="_blank" href="https://apps.apple.com/us/app/hell-let-loose-maps/id1621805768">
+                    Hell Let Loose 地图 iOS 应用
+                </a></li>
+            <li><a target="_blank" href="https://hllseasonal.com/">
+                    Seasonal - Hell Let Loose 季节性锦标赛
+                </a></li>
+            <!--        <li><a target="_blank" href="https://www.hllca.org/">-->
+            <!--            HCA - Hell Let Loose Competitive Association-->
+            <!--        </a></li>-->
+            <li><a target="_blank" href="https://hll-ecl.eu/">
+                    ECL - 欧洲社区联赛
+                </a></li>
+            <li><a target="_blank" href="https://www.18vs18.com/">
+                    18 vs 18 - 紧凑型FPS竞技格式
+                </a></li>
+            <li><a target="_blank" href="https://helo-system.de/">
+                    HeLO 系统 - HLL 竞技战队排名
+                </a></li>
+            <li><a target="_blank" href="https://hllrcon.app/">
+                    <!-- Alternate: https://github.com/MarechJ/hll_rcon_tool -->
+                    HLL 社区 RCON 工具
+                </a></li>
+            <li><a target="_blank" href="https://gist.github.com/timraay/5634d85eab552b5dfafb9fd61273dc52">
+                    HLL RCON 文档
+                </a></li>
+            <li><a target="_blank"
+                    href="https://www.battlemetrics.com/servers/hll?features%5B65611160-93a2-11e9-9a0b-2f914d707833%5D=false&status=online&sort=-players">
+                    BattleMetrics - HLL 服务器列表
+                </a></li>
+            <li><a target="_blank" href="https://hellletloose.fandom.com/wiki/Hell_Let_Loose_Wiki">
+                    Hell Let Loose 维基
+                </a></li>
+            <li><a target="_blank" href="https://hellletloose.fandom.com/wiki/Secrets_and_Easter_Eggs">
+                    Hell Let Loose 维基 - 秘密和彩蛋
+                </a></li>
+            <li><a target="_blank" href="https://www.hellletloose.com/">
+                    HLL 官方网站 - 官方Discord链接
+                </a></li>
+        </ul>
+    </div>
+
+    <div class="ui container" style="padding-top:3%;padding-bottom:3%;color:darkgray;text-align:center">
+        <div style="margin-bottom: 15px;">
+            <strong>原项目:</strong> <a target="_blank"
+                href="https://github.com/mattwright324/maps-let-loose">mattwright324/maps-let-loose</a>
+            <br>
+            <strong>汉化来自:</strong> 东德消防-源寻芳
+            <br>
+            <strong>人间地狱战术技术讨论:</strong> QQ 1552308626
+        </div>
+        <div>
+            chenjiahui-offical | 2025 | <a href="/">主页</a> | <a target="_blank"
+                href="https://github.com/chenjiahui-offical">github</a>
+            | <a target="_blank" href="https://github.com/chenjiahui-offical/maps_let_loose_CN#">maps-let-loose-CN</a>
+        </div>
+    </div>
+</body>
+
+</html>
