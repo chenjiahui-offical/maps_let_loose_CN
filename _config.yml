@@ -1,11 +1,29 @@
-encoding    : UTF-8
-exclude     : [.idea]
-github      : https://github.com/chenjiahui-offical/
+title: Maps Let Loose - 战术地图工具
+description: Hell Let Loose 互动战术地图规划工具
+encoding: UTF-8
+github: https://github.com/chenjiahui-offical/
 
-# make available on local network to test on other devices
-host        : 0.0.0.0
+# 开发环境配置
+host: 0.0.0.0
+port: 4000
 
+# 构建优化
+incremental: true
+safe: true
+
+# 排除文件
 exclude:
+  - .idea/
   - vendor/
   - Gemfile
   - Gemfile.lock
+  - node_modules/
+  - build.sh
+  - DEPLOY.md
+  - README.md
+  - .ruby-version
+  - package.json
+
+# 插件配置
+plugins:
+  - jekyll-sitemap
