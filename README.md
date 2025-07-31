@@ -2,7 +2,7 @@
 
 ## 快速为Hell Let Loose创建高级自定义战术地图。
 
-- https://mattw.io/maps-let-loose/
+- https://chenjiahui-offical.github.io/maps_let_loose_CN/
 
 ![](readme.png)
 
