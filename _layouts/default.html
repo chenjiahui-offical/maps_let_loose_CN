@@ -230,6 +230,13 @@
                                         显示特殊建筑覆盖层 (开发中)
                                     </label>
                                 </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="notes-visible" checked>
+                                    <label class="form-check-label" for="notes-visible">
+                                        显示图标备注
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -390,6 +397,16 @@
                         <div id="flush-collapseFive" class="accordion-collapse collapse show"
                             aria-labelledby="flush-headingFive">
                             <div class="accordion-body">
+                                <div class="mb-3">
+                                    <label for="export-resolution" class="form-label">导出分辨率</label>
+                                    <select id="export-resolution" class="form-select">
+                                        <option value="1920">1920x1920 (标准)</option>
+                                        <option value="2560">2560x2560 (2K)</option>
+                                        <option value="3840">3840x3840 (4K)</option>
+                                        <option value="5120">5120x5120 (5K)</option>
+                                        <option value="7680">7680x7680 (8K)</option>
+                                    </select>
+                                </div>
                                 <button id="save" class="btn btn-secondary">
                                     <i class="bi bi-image"></i>
                                     保存为PNG
@@ -808,6 +825,12 @@
                                             <span class="color" style="background-color:#000000"
                                                 onclick="$('#text-color').val('#000000').trigger('change')"></span>
                                         </div>
+                                        <br>
+                                        <label for="text-font-size">字体大小 (<span
+                                                id="text-font-size-value">24</span>px)</label>
+                                        <br>
+                                        <input id="text-font-size" type="range" class="form-range" value="24" min="1"
+                                            max="72" step="1">
                                     </div>
                                 </div>
 
@@ -816,6 +839,36 @@
                                     <br>
                                     <span class="color blue asset-side selected" title="友军" id="assetFriendly"></span>
                                     <span class="color red asset-side" title="敌军" id="assetEnemy"></span>
+                                </div>
+
+                                <div id="edit-note" style="display: none">
+                                    <label for="element-note">图标备注</label>
+                                    <br>
+                                    <input type="text" id="element-note" class="form-control" placeholder="输入备注文字..."
+                                        maxlength="50">
+                                    <br>
+                                    <label for="note-color">备注颜色</label>
+                                    <br>
+                                    <div class="d-flex align-items-center">
+                                        <input type="color" id="note-color" value="#ffffff">
+                                        <span style="margin-left: 10px;">快速选择</span>
+                                        <span class="color" style="background-color:#ffffff; color: #000000" title="白色"
+                                            onclick="$('#note-color').val('#ffffff').trigger('change')">T</span>
+                                        <span class="color" style="background-color:#ffff00; color: #000000" title="黄色"
+                                            onclick="$('#note-color').val('#ffff00').trigger('change')">T</span>
+                                        <span class="color" style="background-color:#00ff00; color: #000000" title="绿色"
+                                            onclick="$('#note-color').val('#00ff00').trigger('change')">T</span>
+                                        <span class="color" style="background-color:#ff0000; color: #ffffff" title="红色"
+                                            onclick="$('#note-color').val('#ff0000').trigger('change')">T</span>
+                                        <span class="color" style="background-color:#0080ff; color: #ffffff" title="蓝色"
+                                            onclick="$('#note-color').val('#0080ff').trigger('change')">T</span>
+                                    </div>
+                                    <br>
+                                    <label for="note-font-size">字体大小 (<span
+                                            id="note-font-size-value">16</span>px)</label>
+                                    <br>
+                                    <input id="note-font-size" type="range" class="form-range" value="16" min="10"
+                                        max="32" step="1">
                                 </div>
                             </div>
                         </div>
