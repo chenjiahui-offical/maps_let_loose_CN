@@ -59,6 +59,51 @@ const mll = (function () {
     let selectedSlide;
     let slides = [];
 
+    function updateElementNote(element) {
+        if (!element || !element.type) {
+            return;
+        }
+
+        // 移除旧的备注文本
+        if (element.type.noteText) {
+            controls.fabricCanvas.remove(element.type.noteText);
+            controls.exportCanvas.remove(element.type.noteText);
+            element.type.noteText = null;
+        }
+
+        const noteText = element.type.note;
+        const notesVisible = controls.checkNotesVisible.is(":checked");
+        
+        if (noteText && noteText.trim() && notesVisible) {
+            const noteColor = element.type.noteColor || "#ffffff";
+            const noteFontSize = element.type.noteFontSize || 16;
+            
+            const textElement = new fabric.Text(noteText, {
+                left: element.left,
+                top: element.top - 5, // 显示在图标上方，距离很小
+                fontSize: noteFontSize,
+                fill: noteColor,
+                fontFamily: "system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial",
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'bottom',
+                selectable: false,
+                evented: false,
+                excludeFromExport: false,
+                type: {
+                    type: "element-note",
+                    parentId: element.type.id
+                }
+            });
+
+            element.type.noteText = textElement;
+            controls.fabricCanvas.add(textElement);
+            controls.exportCanvas.add(textElement);
+        }
+
+        controls.fabricCanvas.requestRenderAll();
+    }
+
     function updateZoomScale() {
         const zoom = controls.fabricCanvas.getZoom();
         let scale = (3 / zoom) - 2.5;
@@ -279,6 +324,9 @@ const mll = (function () {
             controls.checkSectorSwap.prop('checked', controlState.swapSectors);
             controls.sectorRange.val(controlState.sectorValue);
             controls.checkDrawingsVisible.prop('checked', controlState.drawings);
+            if (controlState.notes !== undefined) {
+                controls.checkNotesVisible.prop('checked', controlState.notes);
+            }
 
             internal.roomsLoadMapAndSP(controlState.map, controlState.selectedSp, spCallback);
         }
@@ -376,6 +424,7 @@ const mll = (function () {
                                 fill: updated.fill,
                                 stroke: updated.stroke,
                                 opacity: updated.opacity,
+                                fontSize: updated.fontSize,
                             });
                         }
 
@@ -512,7 +561,8 @@ const mll = (function () {
             sectors: controls.checkSectors.is(":checked"),
             swapSectors: controls.checkSectorSwap.is(":checked"),
             sectorValue: controls.sectorRange.val(),
-            drawings: controls.checkDrawingsVisible.is(":checked")
+            drawings: controls.checkDrawingsVisible.is(":checked"),
+            notes: controls.checkNotesVisible.is(":checked")
         }
     }
 
@@ -587,6 +637,7 @@ const mll = (function () {
                 strokeDashArray: element.strokeDashArray,
                 points: element.points,
                 opacity: element.opacity,
+                fontSize: element.fontSize,
             })
         }
 
@@ -1333,6 +1384,7 @@ const mll = (function () {
                     backgroundColor: otherObject.backgroundColor,
                     fill: otherObject.fill,
                     opacity: otherObject.opacity,
+                    fontSize: otherObject.fontSize || 24,
                 })
             }
 
@@ -1582,6 +1634,13 @@ const mll = (function () {
                 img.setControlsVisibility(placedMeta[type].controlsVisibility);
             }
 
+            // 从otherObject中恢复备注信息
+            if (otherObject && otherObject.type) {
+                img.type.note = otherObject.type.note || "";
+                img.type.noteColor = otherObject.type.noteColor || "#ffffff";
+                img.type.noteFontSize = otherObject.type.noteFontSize || 16;
+            }
+
             placed.push(img);
 
             addAndOrder(img);
@@ -1590,6 +1649,9 @@ const mll = (function () {
             }
             fixElementSelectBoxes();
             updateZoomScale();
+            
+            // 添加备注文本
+            updateElementNote(img);
 
             if (roomSendUpdate) {
                 roomEditorUpdateElements()
@@ -1633,6 +1695,13 @@ const mll = (function () {
 
         controls.fabricCanvas.remove(target);
         controls.exportCanvas.remove(target);
+        
+        // 删除备注文本
+        if (target.type && target.type.noteText) {
+            controls.fabricCanvas.remove(target.type.noteText);
+            controls.exportCanvas.remove(target.type.noteText);
+        }
+        
         if (target.type && target.type.also) {
             const also = target.type.also;
             for (let j = 0; j < also.length; j++) {
@@ -1672,6 +1741,7 @@ const mll = (function () {
             controls.btnDisableAll = $("#disableAll");
             controls.checkDrawingsVisible = $("#drawing-visible");
             controls.btnSave = $("#save");
+            controls.exportResolution = $("#export-resolution");
             elements.canvas = $("#canvas");
             elements.canvasParent = $("#canvas-container")[0];
             controls.checkSectors = $("#sector-visible");
@@ -1694,7 +1764,13 @@ const mll = (function () {
             elements.noSelection = $("#no-selection");
             elements.editShape = $("#edit-shape");
             elements.editAsset = $("#edit-asset");
+            elements.editNote = $("#edit-note");
             controls.textColor = $("#text-color");
+            controls.textFontSize = $("#text-font-size");
+            controls.elementNote = $("#element-note");
+            controls.noteColor = $("#note-color");
+            controls.noteFontSize = $("#note-font-size");
+            controls.checkNotesVisible = $("#notes-visible");
             elements.textColorDiv = $("#text-color-div");
             elements.fillOpacityDiv = $("#fill-opacity-div");
             controls.shapeBgColor = $("#shape-color");
@@ -3024,6 +3100,15 @@ const mll = (function () {
 
                     controls.fabricCanvas.requestRenderAll();
                 }
+                
+                // 更新备注文本位置
+                if (p && p.type && p.type.noteText) {
+                    p.type.noteText.set({
+                        left: p.left,
+                        top: p.top - 5
+                    });
+                    controls.fabricCanvas.requestRenderAll();
+                }
             });
 
             controls.fabricCanvas.on('object:modified', function (e) {
@@ -3047,6 +3132,7 @@ const mll = (function () {
             function handleSelection(e) {
                 elements.editShape.hide();
                 elements.editAsset.hide();
+                elements.editNote.hide();
                 elements.noSelection.show();
 
                 const type = idx(["e", "type"], e);
@@ -3066,12 +3152,24 @@ const mll = (function () {
                     console.log("customizable element selected");
                     console.log(selectedElement);
 
+                    // 显示备注编辑面板（对所有可自定义元素）
+                    elements.editNote.show();
+                    const noteText = selectedElement.type.note || "";
+                    const noteColor = selectedElement.type.noteColor || "#ffffff";
+                    const noteFontSize = selectedElement.type.noteFontSize || 16;
+                    controls.elementNote.val(noteText);
+                    controls.noteColor.val(noteColor);
+                    controls.noteFontSize.val(noteFontSize);
+                    $("#note-font-size-value").text(noteFontSize);
+
                     if (customizable === "shape") {
                         const elType = idx(["type", "type"], selectedElement);
                         if (elType === "textbox") {
                             elements.textColorDiv.show();
                             controls.textColor.val((selectedElement.fill || "").substring(0, 7));
                             controls.shapeBgColor.val((selectedElement.backgroundColor || "").substring(0, 7));
+                            controls.textFontSize.val(selectedElement.fontSize || 24);
+                            $("#text-font-size-value").text(selectedElement.fontSize || 24);
                         } else {
                             elements.textColorDiv.hide();
                             controls.shapeBgColor.val((selectedElement.fill || "").substring(0, 7));
@@ -3087,6 +3185,7 @@ const mll = (function () {
 
                         elements.noSelection.hide();
                         elements.editShape.show();
+                        elements.editAsset.hide();
                     } else {
                         $(".asset-side").removeClass("selected");
                         const filters = selectedElement.filters;
@@ -3098,6 +3197,7 @@ const mll = (function () {
 
                         elements.noSelection.hide();
                         elements.editAsset.show();
+                        elements.editShape.hide();
                     }
                 }
             }
@@ -3132,6 +3232,57 @@ const mll = (function () {
                 });
 
                 internal.render();
+                roomEditorUpdateElements();
+            });
+
+            controls.textFontSize.on('input', function () {
+                const fontSize = $(this).val();
+                $("#text-font-size-value").text(fontSize);
+                
+                const elType = idx(["type", "type"], selectedElement);
+                if (elType !== "textbox") {
+                    console.log("no selected element or was not a textbox");
+                    return;
+                }
+
+                selectedElement.set({
+                    fontSize: parseInt(fontSize)
+                });
+                controls.fabricCanvas.requestRenderAll();
+                roomEditorUpdateElements();
+            });
+
+            // 备注文本输入事件
+            controls.elementNote.on('input', function () {
+                if (!selectedElement) {
+                    return;
+                }
+                const noteText = $(this).val();
+                selectedElement.type.note = noteText;
+                updateElementNote(selectedElement);
+                roomEditorUpdateElements();
+            });
+
+            // 备注颜色改变事件
+            controls.noteColor.change(function () {
+                if (!selectedElement) {
+                    return;
+                }
+                const noteColor = $(this).val();
+                selectedElement.type.noteColor = noteColor;
+                updateElementNote(selectedElement);
+                roomEditorUpdateElements();
+            });
+
+            // 备注字体大小改变事件
+            controls.noteFontSize.on('input', function () {
+                if (!selectedElement) {
+                    return;
+                }
+                const fontSize = $(this).val();
+                $("#note-font-size-value").text(fontSize);
+                selectedElement.type.noteFontSize = parseInt(fontSize);
+                updateElementNote(selectedElement);
                 roomEditorUpdateElements();
             });
 
@@ -3189,6 +3340,7 @@ const mll = (function () {
 
                 elements.editShape.hide();
                 elements.editAsset.hide();
+                elements.editNote.hide();
                 elements.noSelection.show();
             });
 
@@ -3876,7 +4028,7 @@ const mll = (function () {
             [controls.checkGrid, controls.checkArty, controls.checkStrongpoints, controls.checkInaccessible,
             controls.checkEggs, controls.checkSpecial, controls.checkSectors, controls.checkSectorSwap, controls.checkPlacedElements,
             controls.checkHideRadius, controls.checkArtyFlip, controls.checkSpResource, controls.checkDrawingsVisible,
-            controls.checkDefaults, controls.radioSideA, controls.radioBothSides, controls.radioSideB,
+            controls.checkNotesVisible, controls.checkDefaults, controls.radioSideA, controls.radioBothSides, controls.radioSideB,
             controls.checkOffensiveGarries, controls.checkArtillery, controls.checkTanks, controls.checkTrucks,
             controls.checkCommandSpawn, controls.checkRepairStations,
             ].forEach(function (control) {
@@ -3888,23 +4040,67 @@ const mll = (function () {
             });
 
             controls.btnSave.click(function () {
-                controls.exportCanvas.renderAll();
-                controls.exportCanvas.orderByZindex();
+                const selectedResolution = parseInt($("#export-resolution").val());
+                const originalSize = 1920;
+                
+                if (selectedResolution === originalSize) {
+                    // 使用原有的导出方式
+                    controls.exportCanvas.renderAll();
+                    controls.exportCanvas.orderByZindex();
 
-                for (let i = 0; i < placed.length; i++) {
-                    const element = placed[i];
-                    if (idx(["type", "saveKeepScale"], element)) {
-                        continue;
+                    for (let i = 0; i < placed.length; i++) {
+                        const element = placed[i];
+                        if (idx(["type", "saveKeepScale"], element)) {
+                            continue;
+                        }
+                        placed[i].set({ scaleX: 1, scaleY: 1 });
                     }
-                    placed[i].set({ scaleX: 1, scaleY: 1 });
+
+                    $('<a>').attr({
+                        href: controls.exportCanvas.toDataURL('image/png', 1.0),
+                        download: controls.comboMapSelect.val() + "_Custom_MLL.png"
+                    })[0].click();
+
+                    updateZoomScale();
+                } else {
+                    // 高分辨率导出
+                    const scaleFactor = selectedResolution / originalSize;
+                    
+                    // 创建高分辨率画布
+                    const highResCanvas = document.createElement("canvas");
+                    highResCanvas.width = selectedResolution;
+                    highResCanvas.height = selectedResolution;
+                    
+                    const ctx = highResCanvas.getContext('2d');
+                    ctx.scale(scaleFactor, scaleFactor);
+                    
+                    // 使用原始画布的内容，但放大到高分辨率
+                    controls.exportCanvas.renderAll();
+                    controls.exportCanvas.orderByZindex();
+                    
+                    // 重置元素缩放
+                    for (let i = 0; i < placed.length; i++) {
+                        const element = placed[i];
+                        if (idx(["type", "saveKeepScale"], element)) {
+                            continue;
+                        }
+                        placed[i].set({ scaleX: 1, scaleY: 1 });
+                    }
+                    
+                    // 渲染原始画布
+                    controls.exportCanvas.renderAll();
+                    
+                    // 将原始画布内容绘制到高分辨率画布
+                    ctx.drawImage(controls.exportCanvas.getElement(), 0, 0);
+                    
+                    const resolutionText = "_" + selectedResolution + "p";
+                    $('<a>').attr({
+                        href: highResCanvas.toDataURL('image/png', 1.0),
+                        download: controls.comboMapSelect.val() + "_Custom_MLL" + resolutionText + ".png"
+                    })[0].click();
+                    
+                    updateZoomScale();
                 }
-
-                $('<a>').attr({
-                    href: controls.exportCanvas.toDataURL(),
-                    download: controls.comboMapSelect.val() + "_Custom_MLL.png"
-                })[0].click();
-
-                updateZoomScale();
             });
 
             let lastRangeVal = controls.sectorRange.val();
@@ -4318,6 +4514,11 @@ const mll = (function () {
 
             if (wasLoaded && currentLoadedPoints !== strongpointKey) {
                 currentLoadedPoints = strongpointKey;
+            }
+
+            // 更新所有元素的备注显示
+            for (let i = 0; i < placed.length; i++) {
+                updateElementNote(placed[i]);
             }
 
             if (promises.length) {
